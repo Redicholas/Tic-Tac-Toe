@@ -2,17 +2,29 @@
 import { IPlayer } from '../models/Player';
 import { ref } from 'vue';
 
-const props = defineProps<{currentPlayer: IPlayer}>();
-
-defineEmits<{(e: 'handleClick'): void}>()
-
+const props = defineProps<{currentPlayer: IPlayer, playerX: IPlayer, playerO: IPlayer}>();
 const squares = ref<string[]>(['', '', '', '', '', '', '', '', '']);
+
+let playerXturn = ref<boolean>(true);
+let currentPlayer = ref<IPlayer>(props.playerX as IPlayer);
+
+currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
+
+function handleClick(i: number) {
+    currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
+    squares.value[i] = currentPlayer.value.symbol;
+    playerXturn.value = !playerXturn.value;
+}
 
 </script>
 
 <template>
     <div class="grid">
-        <div class="square" v-for="(square, i) in squares">{{ i }}</div>
+        <div class="square" v-for="(square, i) in squares"
+             :key="i"
+             @click="() => handleClick(i)">
+             {{ square }}
+        </div>
     </div>
 </template>
 
@@ -31,6 +43,10 @@ const squares = ref<string[]>(['', '', '', '', '', '', '', '', '']);
         width: 50px;
         height: 50px;
         border: 1px solid rgb(255, 255, 255);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
     }
 
 </style>

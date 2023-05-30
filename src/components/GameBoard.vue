@@ -13,7 +13,6 @@ function handleClick(i: number) {
   squares.value[i] = currentPlayer.value.symbol;
   if (weHaveAWinner()) {
     alert(`${currentPlayer.value.name} wins!`);
-    squares.value = ['', '', '', '', '', '', '', '', ''];
     return;
   }
   playerXturn.value = !playerXturn.value;
@@ -22,40 +21,39 @@ function handleClick(i: number) {
 
 function weHaveAWinner() {
     // rows
-    if (squares.value[0] === squares.value[1] && squares.value[1] === squares.value[2] && squares.value[0] !== '') {
+    if (squares.value[0] === squares.value[1] && squares.value[1] === squares.value[2] && squares.value[0] !== '' ||
+        squares.value[3] === squares.value[4] && squares.value[4] === squares.value[5] && squares.value[3] !== '' ||
+        squares.value[6] === squares.value[7] && squares.value[7] === squares.value[8] && squares.value[6] !== '') {
         return true;
     }
-    if (squares.value[3] === squares.value[4] && squares.value[4] === squares.value[5] && squares.value[3] !== '') {
-        return true;
-    }
-    if (squares.value[6] === squares.value[7] && squares.value[7] === squares.value[8] && squares.value[6] !== '') {
-        return true;
-    }
+
     // columns
-    if (squares.value[0] === squares.value[3] && squares.value[3] === squares.value[6] && squares.value[0] !== '') {
+    if (squares.value[0] === squares.value[3] && squares.value[3] === squares.value[6] && squares.value[0] !== '' ||
+        squares.value[1] === squares.value[4] && squares.value[4] === squares.value[7] && squares.value[1] !== '' ||
+        squares.value[2] === squares.value[5] && squares.value[5] === squares.value[8] && squares.value[2] !== '') {
         return true;
     }
-    if (squares.value[1] === squares.value[4] && squares.value[4] === squares.value[7] && squares.value[1] !== '') {
-        return true;
-    }
-    if (squares.value[2] === squares.value[5] && squares.value[5] === squares.value[8] && squares.value[2] !== '') {
-        return true;
-    }
+
     // diagonals
-    if (squares.value[0] === squares.value[4] && squares.value[4] === squares.value[8] && squares.value[0] !== '') {
+    if (squares.value[0] === squares.value[4] && squares.value[4] === squares.value[8] && squares.value[0] !== '' ||
+        squares.value[2] === squares.value[4] && squares.value[4] === squares.value[6] && squares.value[2] !== '') {
         return true;
     }
-    if (squares.value[2] === squares.value[4] && squares.value[4] === squares.value[6] && squares.value[2] !== '') {
-        return true;
-    }
+
     return false;
+}
+
+function resetGame() {
+    squares.value = ['', '', '', '', '', '', '', '', ''];
+    playerXturn.value = true;
+    currentPlayer.value = props.playerX as IPlayer;
 }
 
 </script>
 
 <template>
-    <!-- TODO: Display winner text -->
-    <h2>{{ currentPlayer.name }}'s Turn</h2>
+    <h2 v-if="weHaveAWinner()">{{ currentPlayer.name }} won the game! <br />Reset to play again</h2>
+    <h2 v-else >{{ currentPlayer.name }}'s Turn</h2>
     <div class="grid">
         <div class="square" v-for="(square, i) in squares"
              :key="i"
@@ -63,6 +61,7 @@ function weHaveAWinner() {
              {{ square }}
         </div>
     </div>
+    <button @click="resetGame">Reset</button>
 </template>
 
 <style scoped>
@@ -73,7 +72,7 @@ function weHaveAWinner() {
         width: 150px;
         height: 150px;
         background-color: rgb(0, 0, 0);
-        margin: 0 auto;
+        margin: 1rem auto;
     }
 
     .square {

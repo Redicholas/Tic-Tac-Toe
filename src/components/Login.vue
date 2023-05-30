@@ -13,9 +13,20 @@ const playerOname = ref<string>('');
 </script>
 
 <template>
-    <input type="text" v-model="playerXname" placeholder="Player Xs Name">
-    <input type="text" v-model="playerOname" placeholder="Player Os Name">
-    <button @click="getPlayers">Start Game</button>
+    <div class="login">
+        <input type="text" v-model="playerXname" placeholder="Player Xs Name">
+        <input type="text" v-model="playerOname" placeholder="Player Os Name">
+        <button @click="getPlayers">Start Game</button>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+    input {
+        height: 30px;
+    }
+    .login {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+</style>

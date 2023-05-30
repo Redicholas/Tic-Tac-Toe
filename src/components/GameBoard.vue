@@ -8,17 +8,54 @@ const squares = ref<string[]>(['', '', '', '', '', '', '', '', '']);
 let playerXturn = ref<boolean>(true);
 let currentPlayer = ref<IPlayer>(props.playerX as IPlayer);
 
-currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
-
 function handleClick(i: number) {
-    currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
-    squares.value[i] = currentPlayer.value.symbol;
-    playerXturn.value = !playerXturn.value;
+  currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
+  squares.value[i] = currentPlayer.value.symbol;
+  if (weHaveAWinner()) {
+    alert(`${currentPlayer.value.name} wins!`);
+    squares.value = ['', '', '', '', '', '', '', '', ''];
+    return;
+  }
+  playerXturn.value = !playerXturn.value;
+  currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
+}
+
+function weHaveAWinner() {
+    // rows
+    if (squares.value[0] === squares.value[1] && squares.value[1] === squares.value[2] && squares.value[0] !== '') {
+        return true;
+    }
+    if (squares.value[3] === squares.value[4] && squares.value[4] === squares.value[5] && squares.value[3] !== '') {
+        return true;
+    }
+    if (squares.value[6] === squares.value[7] && squares.value[7] === squares.value[8] && squares.value[6] !== '') {
+        return true;
+    }
+    // columns
+    if (squares.value[0] === squares.value[3] && squares.value[3] === squares.value[6] && squares.value[0] !== '') {
+        return true;
+    }
+    if (squares.value[1] === squares.value[4] && squares.value[4] === squares.value[7] && squares.value[1] !== '') {
+        return true;
+    }
+    if (squares.value[2] === squares.value[5] && squares.value[5] === squares.value[8] && squares.value[2] !== '') {
+        return true;
+    }
+    // diagonals
+    if (squares.value[0] === squares.value[4] && squares.value[4] === squares.value[8] && squares.value[0] !== '') {
+        return true;
+    }
+    if (squares.value[2] === squares.value[4] && squares.value[4] === squares.value[6] && squares.value[2] !== '') {
+        return true;
+    }
+    return false;
 }
 
 </script>
 
 <template>
+    <!-- TODO: Display winner text -->
+    <h2>{{ currentPlayer.name }}'s Turn</h2>
     <div class="grid">
         <div class="square" v-for="(square, i) in squares"
              :key="i"

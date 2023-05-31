@@ -6,7 +6,7 @@ const props = defineProps<{currentPlayer: IPlayer, playerX: IPlayer, playerO: IP
 const emits = defineEmits<{(e: 'reset', empty: string): void}>();
 const squares = ref<string[]>(['', '', '', '', '', '', '', '', '']);
 
-let playerXturn = ref<boolean>(true);
+let playerXturn = ref<boolean>(Math.random() < 0.5);
 let currentPlayer = ref<IPlayer>(props.playerX as IPlayer);
 
 function handleClick(i: number) {
@@ -57,8 +57,7 @@ function gameIsEven() {
 
 function playAgain() {
     squares.value = ['', '', '', '', '', '', '', '', ''];
-    playerXturn.value = true;
-    currentPlayer.value = props.playerX as IPlayer;
+    currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
 }
 
 function reset() {
@@ -92,7 +91,6 @@ function reset() {
 </template>
 
 <style scoped>
-
     main {
         display: flex;
         justify-content: space-around;
@@ -107,6 +105,7 @@ function reset() {
         align-items: center;
         gap: 5px;
     }
+
     .grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

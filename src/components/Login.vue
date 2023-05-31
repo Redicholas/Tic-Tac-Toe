@@ -4,6 +4,10 @@ import { ref } from 'vue';
 const emits = defineEmits<{(e: 'getPlayers', nameX: string, nameO: string): void}>()
 
 function getPlayers() {
+    if (playerXname.value === '' || playerOname.value === '') {
+        alert('Please enter both players names');
+        return;
+    }
     emits("getPlayers", playerXname.value, playerOname.value);   
 }
 

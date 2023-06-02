@@ -1,13 +1,31 @@
 <script setup lang="ts">
 import { IPlayer } from '../models/Player';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps<{currentPlayer: IPlayer, playerX: IPlayer, playerO: IPlayer}>();
 const emits = defineEmits<{(e: 'reset', empty: string): void}>();
 const squares = ref<string[]>(['', '', '', '', '', '', '', '', '']);
 
-let playerXturn = ref<boolean>(Math.random() < 0.5);
+let playerXturn = ref<boolean>(true);
 let currentPlayer = ref<IPlayer>(props.playerX as IPlayer);
+
+onMounted(() => {
+    if (localStorage.getItem('squares')) {
+        squares.value = JSON.parse(localStorage.getItem('squares') as string);
+    }
+    if (localStorage.getItem('playerXturn')) {
+        playerXturn.value = JSON.parse(localStorage.getItem('playerXturn') as string);
+    }
+    if (localStorage.getItem('currentPlayer')) {
+        currentPlayer.value = JSON.parse(localStorage.getItem('currentPlayer') as string);
+    }
+    if (localStorage.getItem('playerXscore')) {
+        props.playerX.score = JSON.parse(localStorage.getItem('playerXscore') as string);
+    }
+    if (localStorage.getItem('playerOscore')) {
+        props.playerO.score = JSON.parse(localStorage.getItem('playerOscore') as string);
+    }
+})
 
 function handleClick(i: number) {
     if (squares.value[i] != '') return
@@ -25,6 +43,15 @@ function handleClick(i: number) {
     }
     playerXturn.value = !playerXturn.value;
     currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
+    saveState();
+}
+
+function saveState() {
+    localStorage.setItem('squares', JSON.stringify(squares.value));
+    localStorage.setItem('playerXturn', JSON.stringify(playerXturn.value));
+    localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer.value));
+    localStorage.setItem('playerXscore', JSON.stringify(props.playerX.score));
+    localStorage.setItem('playerOscore', JSON.stringify(props.playerO.score));
 }
 
 function weHaveAWinner() {
@@ -32,6 +59,8 @@ function weHaveAWinner() {
     if (squares.value[0] === squares.value[1] && squares.value[1] === squares.value[2] && squares.value[0] !== '' ||
         squares.value[3] === squares.value[4] && squares.value[4] === squares.value[5] && squares.value[3] !== '' ||
         squares.value[6] === squares.value[7] && squares.value[7] === squares.value[8] && squares.value[6] !== '') {
+            switchTurn();
+            saveState();
         return true;
     }
 
@@ -39,29 +68,44 @@ function weHaveAWinner() {
     if (squares.value[0] === squares.value[3] && squares.value[3] === squares.value[6] && squares.value[0] !== '' ||
         squares.value[1] === squares.value[4] && squares.value[4] === squares.value[7] && squares.value[1] !== '' ||
         squares.value[2] === squares.value[5] && squares.value[5] === squares.value[8] && squares.value[2] !== '') {
+            switchTurn();
+            saveState();
         return true;
     }
 
     // diagonals
     if (squares.value[0] === squares.value[4] && squares.value[4] === squares.value[8] && squares.value[0] !== '' ||
         squares.value[2] === squares.value[4] && squares.value[4] === squares.value[6] && squares.value[2] !== '') {
+            switchTurn();
+            saveState();
         return true;
     }
 
     return false;
 }
 
+function switchTurn() {
+    if (currentPlayer.value === props.playerX) {
+        playerXturn.value = false;
+    } else {
+        playerXturn.value = true;
+    }
+}
+
 function gameIsEven() {
     return squares.value.every(square => square !== '') && !weHaveAWinner();
+    saveState();
 }
 
 function playAgain() {
     squares.value = ['', '', '', '', '', '', '', '', ''];
     currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
+    saveState();
 }
 
 function reset() {
     squares.value = ['', '', '', '', '', '', '', '', ''];
+    localStorage.clear();
     emits('reset', '');
 }
 

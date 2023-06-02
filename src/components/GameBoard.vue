@@ -27,6 +27,14 @@ onMounted(() => {
     }
 })
 
+function saveState() {
+    localStorage.setItem('squares', JSON.stringify(squares.value));
+    localStorage.setItem('playerXturn', JSON.stringify(playerXturn.value));
+    localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer.value));
+    localStorage.setItem('playerXscore', JSON.stringify(props.playerX.score));
+    localStorage.setItem('playerOscore', JSON.stringify(props.playerO.score));
+}
+
 function handleClick(i: number) {
     if (squares.value[i] != '') return
     if (!weHaveAWinner()) {
@@ -34,9 +42,7 @@ function handleClick(i: number) {
     } else {
         return;
     }
-    if (gameIsEven()) {
-        alert(`The game is even, play again!`)
-    }
+    if (gameIsEven()) alert(`The game is even, play again!`)
     if (weHaveAWinner()) {
         currentPlayer.value.score += 1;
         return;
@@ -44,14 +50,6 @@ function handleClick(i: number) {
     playerXturn.value = !playerXturn.value;
     currentPlayer.value = playerXturn.value ? props.playerX : props.playerO;
     saveState();
-}
-
-function saveState() {
-    localStorage.setItem('squares', JSON.stringify(squares.value));
-    localStorage.setItem('playerXturn', JSON.stringify(playerXturn.value));
-    localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer.value));
-    localStorage.setItem('playerXscore', JSON.stringify(props.playerX.score));
-    localStorage.setItem('playerOscore', JSON.stringify(props.playerO.score));
 }
 
 function weHaveAWinner() {
@@ -85,16 +83,11 @@ function weHaveAWinner() {
 }
 
 function switchTurn() {
-    if (currentPlayer.value === props.playerX) {
-        playerXturn.value = false;
-    } else {
-        playerXturn.value = true;
-    }
+    playerXturn.value = currentPlayer.value === props.playerX ? false : true;
 }
 
 function gameIsEven() {
     return squares.value.every(square => square !== '') && !weHaveAWinner();
-    saveState();
 }
 
 function playAgain() {
@@ -122,7 +115,7 @@ function reset() {
             :key="i"
             @click="() => handleClick(i)">
             {{ square }}
-        </div>
+            </div>
         </div>
         <div class="stats">
             <h3>Score</h3>

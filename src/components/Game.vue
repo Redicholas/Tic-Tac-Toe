@@ -4,9 +4,17 @@ import { IPlayer } from '../models/Player';
 import Login from './Login.vue';
 import GameBoard from './GameBoard.vue';
 
-let gameIsRunning = localStorage.getItem('gameIsRunning') ? ref<boolean>(JSON.parse(localStorage.getItem('gameIsRunning') as string)) : ref<boolean>(false);
-let playerX = localStorage.getItem('playerX') ? ref<IPlayer>(JSON.parse(localStorage.getItem('playerX') as string)) : ref<IPlayer>({ name: '', symbol: 'X', score: 0 });
-let playerO = localStorage.getItem('playerO') ? ref<IPlayer>(JSON.parse(localStorage.getItem('playerO') as string)) : ref<IPlayer>({ name: '', symbol: 'O', score: 0 });
+let gameIsRunning = localStorage.getItem('gameIsRunning') ?
+ ref<boolean>(JSON.parse(localStorage.getItem('gameIsRunning') as string)) : 
+ ref<boolean>(false);
+
+let playerX = localStorage.getItem('playerX') ?
+ ref<IPlayer>(JSON.parse(localStorage.getItem('playerX') as string)) : 
+ ref<IPlayer>({ name: '', symbol: 'X', score: 0 });
+
+let playerO = localStorage.getItem('playerO') ?
+ ref<IPlayer>(JSON.parse(localStorage.getItem('playerO') as string)) : 
+ ref<IPlayer>({ name: '', symbol: 'O', score: 0 });
 
 function handleGetPlayers(playerXname: string, playerOname: string) {
     playerX.value.name = playerXname;
@@ -26,7 +34,10 @@ function reset() {
 </script>
 
 <template>
-    <GameBoard v-if="gameIsRunning" :playerX="playerX" :playerO="playerO" @reset="reset" />
+    <GameBoard v-if="gameIsRunning" 
+    :playerX="playerX" 
+    :playerO="playerO" 
+    @reset="reset" />
     <Login v-else @getPlayers="handleGetPlayers" />
 </template>
 

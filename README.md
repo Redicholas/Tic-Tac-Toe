@@ -1,21 +1,8 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/XOvGiyhD)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11236814&assignment_repo_type=AssignmentRepo)
-# Inlämningsuppgift Tre-i-rad
+# Tic-Tac-Toe
+This is a simple, fun, and interactive game of Tic-Tac-Toe, a classic game that is familiar to many. This project was developed for a school assignment using Vue.js, a modern and efficient JavaScript framework.
 
-Denna mall innehåller ett tomt vue-projekt baserat på typescript. Er uppgift är att skapa spelet tre-i-rad med hjälp av denna mall. Eftersom ni inte har någonting att utgå ifrån så har ni fria händer att skapa just er unika lösning.
+## Project Overview
+The project is a web-based version of the classic game Tic-Tac-Toe. It allows two players to play against each other on the same device. The game alternates turns between the players, starting with Player 1, who is the 'X', and then Player 2, who is the 'O'. The player who places three of their marks in a horizontal, vertical, or diagonal row first wins the game. If the board is filled and no player has won, it is a draw.
 
-## Betyg G
-
-- Kunna ange spelarnamn för X respektive O
-- Kunna spela ett spel och få en vinnare/oavgjort
-- Inte kunna göra fler drag efter spelet är slut
-- Kunna starta ett nytt spel
-- Använda minst en komponent
-
-## Betyg VG
-
-- Använda minst tre komponenter för er lösning
-- Spara poänghistorik för spelarna
-- Kunna visa poängstatistiken
-- Kunna stänga webbläsaren och komma tillbaka där spelet avbröts
-- Kunna nollställa statistik och börja om med nya spelare
+## Built with
+- Vue.js
